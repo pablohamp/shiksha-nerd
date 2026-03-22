@@ -798,9 +798,6 @@ export default function Home() {
                   </div>
                 </div>
               )}
-                  </div>
-                </div>
-              )}
 
               {tab === "timeline" && (
                 <div style={{ paddingLeft: 18, position: "relative" }}>

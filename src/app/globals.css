@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap');
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #2c2a28 transparent;
+  box-sizing: border-box;
+}
+
+*::-webkit-scrollbar {
+  width: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #2c2a28;
+  border-radius: 2px;
+}
+
+::selection {
+  background: rgba(201, 169, 110, 0.3);
+}
+
+body {
+  background: #0f0f0e;
+  color: #e8e4dd;
+  font-family: 'Outfit', sans-serif;
+}

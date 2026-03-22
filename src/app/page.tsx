@@ -121,7 +121,19 @@ export default function Home() {
   const [reminders, setReminders] = useState<any[]>([]);
   const [newReminder, setNewReminder] = useState({ date: "", time: "", note: "" });
   const [pushEnabled, setPushEnabled] = useState(false);
+  const [collapsedCols, setCollapsedCols] = useState<Record<string, boolean>>({});
+  const [isMobile, setIsMobile] = useState(false);
   const [nf, setNF] = useState({ name: "", phone: "", email: "", program: "", budget: "", tier: "", intake: "2026", spec: "", global_mba: false, stage: "ringing", counsellor: "", pitched: "", looked: "", notes: "", source: "" });
+
+  // Detect mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  const toggleCol = (id: string) => setCollapsedCols((p) => ({ ...p, [id]: !p[id] }));
 
   const notify = (msg: string) => { setToast(msg); setTimeout(() => setToast(null), 3000); };
 
@@ -453,62 +465,79 @@ export default function Home() {
 
       {/* PIPELINE */}
       {view === "pipeline" && (
-        <div style={{ padding: "0 20px 28px", display: "flex", gap: 12, overflowX: "auto", minHeight: 420 }}>
+        <div style={{ padding: "0 20px 28px", display: "flex", flexDirection: isMobile ? "column" : "row", gap: 12, overflowX: isMobile ? "hidden" : "auto", minHeight: isMobile ? "auto" : 420 }}>
           {PIPELINE_COLS.map((col) => {
             const colLeads = filtered.filter((l) => stageOf(l.stage)?.g === col.id);
+            const isCollapsed = isMobile && collapsedCols[col.id];
             return (
               <div key={col.id}
-                onDragOver={(e) => { e.preventDefault(); setDragCol(col.id); }}
-                onDragLeave={() => setDragCol(null)}
-                onDrop={(e) => { e.preventDefault(); const lid = e.dataTransfer.getData("lid"); const fs = STAGES.find((s) => s.g === col.id); if (fs) handleUpdate(lid, { stage: fs.id }); setDragCol(null); }}
-                style={{ minWidth: 240, flex: "1 1 240px", background: dragCol === col.id ? "rgba(201,169,110,0.08)" : "#1a1918", borderRadius: 12, border: `1px solid ${dragCol === col.id ? "rgba(201,169,110,0.25)" : "rgba(195,180,150,0.1)"}`, transition: "all .25s", display: "flex", flexDirection: "column" }}>
-                <div style={{ padding: "14px 16px 10px", borderBottom: "1px solid rgba(195,180,150,0.1)" }}>
+                onDragOver={!isMobile ? (e) => { e.preventDefault(); setDragCol(col.id); } : undefined}
+                onDragLeave={!isMobile ? () => setDragCol(null) : undefined}
+                onDrop={!isMobile ? (e) => { e.preventDefault(); const lid = e.dataTransfer.getData("lid"); const fs = STAGES.find((s) => s.g === col.id); if (fs) handleUpdate(lid, { stage: fs.id }); setDragCol(null); } : undefined}
+                style={{ minWidth: isMobile ? "auto" : 240, flex: isMobile ? "none" : "1 1 240px", background: dragCol === col.id ? "rgba(201,169,110,0.08)" : "#1a1918", borderRadius: 12, border: `1px solid ${dragCol === col.id ? "rgba(201,169,110,0.25)" : "rgba(195,180,150,0.1)"}`, transition: "all .25s", display: "flex", flexDirection: "column" }}>
+                <div onClick={() => isMobile && toggleCol(col.id)} style={{ padding: "14px 16px 10px", borderBottom: isCollapsed ? "none" : "1px solid rgba(195,180,150,0.1)", cursor: isMobile ? "pointer" : "default" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: 13, fontWeight: 600, color: "#f0ece4" }}>{col.label}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      {isMobile && <span style={{ fontSize: 12, color: "#6b6560", transition: "transform 0.2s", transform: isCollapsed ? "rotate(-90deg)" : "rotate(0deg)" }}>{"▼"}</span>}
+                      <span style={{ fontSize: 13, fontWeight: 600, color: "#f0ece4" }}>{col.label}</span>
+                    </div>
                     <span style={{ fontSize: 12, fontWeight: 700, color: "#c9a96e", fontFamily: "'Cormorant Garamond',serif", background: "rgba(201,169,110,0.1)", padding: "2px 10px", borderRadius: 4 }}>{colLeads.length}</span>
                   </div>
                   <div style={{ fontSize: 11, color: "#6b6560", marginTop: 2 }}>{col.sub}</div>
                 </div>
-                <div style={{ padding: 10, flex: 1, overflowY: "auto", maxHeight: 520 }}>
-                  {colLeads.map((lead) => {
-                    const si = stageOf(lead.stage);
-                    const fuOverdue = lead.follow_ups?.some((f: any) => f.date <= TODAY);
-                    return (
-                      <div key={lead.id} draggable
-                        onDragStart={(e) => e.dataTransfer.setData("lid", lead.id)}
-                        onClick={() => { setSel(lead); setTab("overview"); }}
-                        style={{ background: "#151413", borderRadius: 10, padding: "13px 15px", marginBottom: 8, cursor: "pointer", border: "1px solid rgba(195,180,150,0.1)", transition: "all .2s" }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,169,110,0.25)"; (e.currentTarget as HTMLElement).style.background = "#1c1b19"; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(195,180,150,0.1)"; (e.currentTarget as HTMLElement).style.background = "#151413"; }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                            <UrgencyDot lead={lead} />
-                            <div>
-                              <div style={{ fontSize: 14, fontWeight: 600, color: "#f0ece4", marginBottom: 2 }}>{lead.name}</div>
-                              <div style={{ fontSize: 12, color: "#6b6560" }}>{lead.phone}</div>
+                {!isCollapsed && (
+                  <div style={{ padding: 10, flex: 1, overflowY: "auto", maxHeight: isMobile ? "none" : 520 }}>
+                    {colLeads.map((lead) => {
+                      const si = stageOf(lead.stage);
+                      const fuOverdue = lead.follow_ups?.some((f: any) => f.date <= TODAY);
+                      return (
+                        <div key={lead.id} draggable={!isMobile}
+                          onDragStart={!isMobile ? (e) => e.dataTransfer.setData("lid", lead.id) : undefined}
+                          onClick={() => { setSel(lead); setTab("overview"); }}
+                          style={{ background: "#151413", borderRadius: 10, padding: "13px 15px", marginBottom: 8, cursor: "pointer", border: "1px solid rgba(195,180,150,0.1)", transition: "all .2s" }}
+                          onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,169,110,0.25)"; (e.currentTarget as HTMLElement).style.background = "#1c1b19"; }}
+                          onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(195,180,150,0.1)"; (e.currentTarget as HTMLElement).style.background = "#151413"; }}>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                              <UrgencyDot lead={lead} />
+                              <div>
+                                <div style={{ fontSize: 14, fontWeight: 600, color: "#f0ece4", marginBottom: 2 }}>{lead.name}</div>
+                                <div style={{ fontSize: 12, color: "#6b6560" }}>{lead.phone}</div>
+                              </div>
                             </div>
+                            <Score v={lead.score} />
                           </div>
-                          <Score v={lead.score} />
-                        </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
-                          <Tag>{lead.program}</Tag>
-                          <Tag c="#7ba4c4">{lead.budget}</Tag>
-                          {lead.global_mba && <Tag c="#7bbfb4">Global</Tag>}
-                        </div>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <span style={{ fontSize: 11, color: "#6b6560" }}>{lead.counsellor}</span>
-                          <Tag c="#9a9488" style={{ fontSize: 9 }}>{si?.label}</Tag>
-                        </div>
-                        {lead.follow_ups?.length > 0 && (
-                          <div style={{ marginTop: 8, padding: "6px 10px", borderRadius: 6, background: fuOverdue ? "rgba(196,122,108,0.1)" : "rgba(201,169,110,0.06)", fontSize: 11, color: fuOverdue ? "#c47a6c" : "#c9a96e", border: `1px solid ${fuOverdue ? "rgba(196,122,108,0.15)" : "rgba(201,169,110,0.1)"}` }}>
-                            {"↻"} {lead.follow_ups[0].note} — {lead.follow_ups[0].date}
+                          <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
+                            <Tag>{lead.program}</Tag>
+                            <Tag c="#7ba4c4">{lead.budget}</Tag>
+                            {lead.global_mba && <Tag c="#7bbfb4">Global</Tag>}
                           </div>
-                        )}
-                      </div>
-                    );
-                  })}
-                  {colLeads.length === 0 && <div style={{ textAlign: "center", padding: 24, color: "#6b6560", fontSize: 12 }}>Drop leads here</div>}
-                </div>
+                          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                            <span style={{ fontSize: 11, color: "#6b6560" }}>{lead.counsellor}</span>
+                            <Tag c="#9a9488" style={{ fontSize: 9 }}>{si?.label}</Tag>
+                          </div>
+                          {lead.follow_ups?.length > 0 && (
+                            <div style={{ marginTop: 8, padding: "6px 10px", borderRadius: 6, background: fuOverdue ? "rgba(196,122,108,0.1)" : "rgba(201,169,110,0.06)", fontSize: 11, color: fuOverdue ? "#c47a6c" : "#c9a96e", border: `1px solid ${fuOverdue ? "rgba(196,122,108,0.15)" : "rgba(201,169,110,0.1)"}` }}>
+                              {"↻"} {lead.follow_ups[0].note} — {lead.follow_ups[0].date}
+                            </div>
+                          )}
+                          {isMobile && (
+                            <div style={{ marginTop: 8, paddingTop: 8, borderTop: "1px solid rgba(195,180,150,0.06)" }}>
+                              <select
+                                value={lead.stage}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => { e.stopPropagation(); handleUpdate(lead.id, { stage: e.target.value }); }}
+                                style={{ width: "100%", padding: "7px 10px", borderRadius: 6, border: "1px solid rgba(195,180,150,0.12)", background: "#0f0f0e", color: "#c9a96e", fontSize: 12, fontFamily: "'Outfit',sans-serif", cursor: "pointer" }}>
+                                {STAGES.map((s) => <option key={s.id} value={s.id}>{s.label}</option>)}
+                              </select>
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })}
+                    {colLeads.length === 0 && <div style={{ textAlign: "center", padding: 24, color: "#6b6560", fontSize: 12 }}>No leads here</div>}
+                  </div>
+                )}
               </div>
             );
           })}

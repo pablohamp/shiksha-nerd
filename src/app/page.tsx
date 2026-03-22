@@ -13,11 +13,11 @@ const daysDiff = (a: string, b: string) => Math.floor((new Date(b).getTime() - n
 function Score({ v }: { v: number }) {
   const color = v >= 75 ? "#7cb98a" : v >= 45 ? "#c9a96e" : "#c47a6c";
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-      <div style={{ width: 40, height: 3, borderRadius: 2, background: "#2c2a28" }}>
-        <div style={{ width: `${v}%`, height: "100%", borderRadius: 2, background: color, transition: "width .6s ease" }} />
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+      <div style={{ width: 48, height: 5, borderRadius: 3, background: "#2c2a28" }}>
+        <div style={{ width: `${v}%`, height: "100%", borderRadius: 3, background: color, transition: "width .6s ease" }} />
       </div>
-      <span style={{ fontSize: 10, fontWeight: 600, color, fontFamily: "'Cormorant Garamond',serif" }}>{v}</span>
+      <span style={{ fontSize: 12, fontWeight: 700, color, fontFamily: "'Cormorant Garamond',serif" }}>{v}</span>
     </div>
   );
 }
@@ -25,9 +25,9 @@ function Score({ v }: { v: number }) {
 function Tag({ children, c = "#c9a96e", style: sx = {} }: { children: React.ReactNode; c?: string; style?: React.CSSProperties }) {
   return (
     <span style={{
-      display: "inline-flex", padding: "2px 8px", borderRadius: 3, fontSize: 10,
-      fontWeight: 600, letterSpacing: "0.06em", color: c,
-      background: c + "12", border: `1px solid ${c}20`, textTransform: "uppercase", ...sx,
+      display: "inline-flex", padding: "3px 10px", borderRadius: 4, fontSize: 11,
+      fontWeight: 600, letterSpacing: "0.04em", color: c,
+      background: c + "18", border: `1px solid ${c}30`, textTransform: "uppercase", ...sx,
     }}>
       {children}
     </span>
@@ -39,22 +39,22 @@ function UrgencyDot({ lead }: { lead: any }) {
   const overdue = lead.follow_ups?.some((f: any) => f.date <= TODAY);
   const done = ["enrolled", "cashback", "lost", "not_interested"].includes(lead.stage);
   if (done) return null;
-  if (overdue) return <div style={{ width: 7, height: 7, borderRadius: 4, background: "#e45858", boxShadow: "0 0 8px #e4585880", flexShrink: 0 }} />;
-  if (dd >= 5) return <div style={{ width: 6, height: 6, borderRadius: 3, background: "#c9a96e", boxShadow: "0 0 6px rgba(201,169,110,0.6)", flexShrink: 0 }} />;
-  if (dd >= 3) return <div style={{ width: 5, height: 5, borderRadius: 3, background: "rgba(201,169,110,0.5)", flexShrink: 0 }} />;
+  if (overdue) return <div style={{ width: 8, height: 8, borderRadius: 4, background: "#e45858", boxShadow: "0 0 10px #e4585880", flexShrink: 0 }} />;
+  if (dd >= 5) return <div style={{ width: 7, height: 7, borderRadius: 4, background: "#c9a96e", boxShadow: "0 0 8px rgba(201,169,110,0.6)", flexShrink: 0 }} />;
+  if (dd >= 3) return <div style={{ width: 6, height: 6, borderRadius: 3, background: "rgba(201,169,110,0.5)", flexShrink: 0 }} />;
   return null;
 }
 
 function Modal({ open, onClose, children, title, wide }: { open: boolean; onClose: () => void; children: React.ReactNode; title: string; wide?: boolean }) {
   if (!open) return null;
   return (
-    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.75)", backdropFilter: "blur(16px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 12 }}>
-      <div onClick={(e) => e.stopPropagation()} style={{ background: "#191817", borderRadius: 16, border: "1px solid rgba(195,180,150,0.09)", width: wide ? 800 : 520, maxWidth: "96vw", maxHeight: "88vh", overflow: "auto", boxShadow: "0 50px 100px rgba(0,0,0,0.6)" }}>
-        <div style={{ padding: "16px 22px", borderBottom: "1px solid rgba(195,180,150,0.09)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "#191817", zIndex: 2, borderRadius: "16px 16px 0 0" }}>
-          <h2 style={{ margin: 0, fontSize: 16, fontWeight: 500, color: "#e8e4dd", fontFamily: "'Cormorant Garamond',serif" }}>{title}</h2>
-          <button onClick={onClose} style={{ background: "none", border: "none", color: "#8a8578", fontSize: 18, cursor: "pointer", padding: 4, lineHeight: 1 }}>×</button>
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.8)", backdropFilter: "blur(20px)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ background: "#181716", borderRadius: 20, border: "1px solid rgba(195,180,150,0.12)", width: wide ? 820 : 540, maxWidth: "96vw", maxHeight: "90vh", overflow: "auto", boxShadow: "0 50px 100px rgba(0,0,0,0.7)" }}>
+        <div style={{ padding: "20px 26px", borderBottom: "1px solid rgba(195,180,150,0.1)", display: "flex", justifyContent: "space-between", alignItems: "center", position: "sticky", top: 0, background: "#181716", zIndex: 2, borderRadius: "20px 20px 0 0" }}>
+          <h2 style={{ margin: 0, fontSize: 20, fontWeight: 600, color: "#f0ece4", fontFamily: "'Cormorant Garamond',serif" }}>{title}</h2>
+          <button onClick={onClose} style={{ background: "rgba(255,255,255,0.05)", border: "none", color: "#8a8578", fontSize: 16, cursor: "pointer", padding: "4px 8px", lineHeight: 1, borderRadius: 6 }}>×</button>
         </div>
-        <div style={{ padding: "18px 22px" }}>{children}</div>
+        <div style={{ padding: "22px 26px" }}>{children}</div>
       </div>
     </div>
   );
@@ -62,18 +62,18 @@ function Modal({ open, onClose, children, title, wide }: { open: boolean; onClos
 
 function Field({ label, ...props }: { label?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
   return (
-    <div style={{ marginBottom: 14 }}>
-      {label && <label style={{ display: "block", fontSize: 9, fontWeight: 700, color: "#8a8578", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.12em" }}>{label}</label>}
-      <input {...props} style={{ width: "100%", padding: "9px 12px", borderRadius: 6, border: "1px solid rgba(195,180,150,0.09)", background: "#0f0f0e", color: "#e8e4dd", fontSize: 13, outline: "none", fontFamily: "'Outfit',sans-serif", boxSizing: "border-box", ...(props.style || {}) }} />
+    <div style={{ marginBottom: 16 }}>
+      {label && <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#9a9488", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>{label}</label>}
+      <input {...props} style={{ width: "100%", padding: "11px 14px", borderRadius: 8, border: "1px solid rgba(195,180,150,0.12)", background: "#0f0f0e", color: "#f0ece4", fontSize: 14, outline: "none", fontFamily: "'Outfit',sans-serif", boxSizing: "border-box", transition: "border-color 0.2s", ...(props.style || {}) }} />
     </div>
   );
 }
 
 function Sel({ label, options, ...props }: { label?: string; options: string[] } & React.SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <div style={{ marginBottom: 14 }}>
-      {label && <label style={{ display: "block", fontSize: 9, fontWeight: 700, color: "#8a8578", marginBottom: 5, textTransform: "uppercase", letterSpacing: "0.12em" }}>{label}</label>}
-      <select {...props} style={{ width: "100%", padding: "9px 12px", borderRadius: 6, border: "1px solid rgba(195,180,150,0.09)", background: "#0f0f0e", color: "#e8e4dd", fontSize: 13, outline: "none", fontFamily: "'Outfit',sans-serif", cursor: "pointer", ...(props.style || {}) }}>
+    <div style={{ marginBottom: 16 }}>
+      {label && <label style={{ display: "block", fontSize: 11, fontWeight: 600, color: "#9a9488", marginBottom: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>{label}</label>}
+      <select {...props} style={{ width: "100%", padding: "11px 14px", borderRadius: 8, border: "1px solid rgba(195,180,150,0.12)", background: "#0f0f0e", color: "#f0ece4", fontSize: 14, outline: "none", fontFamily: "'Outfit',sans-serif", cursor: "pointer", ...(props.style || {}) }}>
         <option value="">—</option>
         {options.map((o) => <option key={o} value={o}>{o}</option>)}
       </select>
@@ -83,12 +83,12 @@ function Sel({ label, options, ...props }: { label?: string; options: string[] }
 
 function Btn({ children, v = "primary", ...props }: { children: React.ReactNode; v?: string } & React.ButtonHTMLAttributes<HTMLButtonElement>) {
   const styles: Record<string, React.CSSProperties> = {
-    primary: { background: "#c9a96e", color: "#0f0f0e", border: "none", fontWeight: 600 },
-    ghost: { background: "transparent", color: "#8a8578", border: "1px solid rgba(195,180,150,0.09)" },
-    danger: { background: "rgba(196,122,108,0.1)", color: "#c47a6c", border: "1px solid rgba(196,122,108,0.13)" },
+    primary: { background: "#c9a96e", color: "#0f0f0e", border: "none", fontWeight: 700 },
+    ghost: { background: "rgba(255,255,255,0.04)", color: "#9a9488", border: "1px solid rgba(195,180,150,0.12)" },
+    danger: { background: "rgba(196,122,108,0.12)", color: "#c47a6c", border: "1px solid rgba(196,122,108,0.18)" },
   };
   return (
-    <button {...props} style={{ padding: "8px 18px", borderRadius: 6, fontSize: 12, cursor: "pointer", fontFamily: "'Outfit',sans-serif", letterSpacing: "0.03em", transition: "all .2s", ...(styles[v] || styles.primary), ...(props.style || {}) }}>
+    <button {...props} style={{ padding: "10px 20px", borderRadius: 8, fontSize: 13, cursor: "pointer", fontFamily: "'Outfit',sans-serif", letterSpacing: "0.02em", transition: "all .2s", ...(styles[v] || styles.primary), ...(props.style || {}) }}>
       {children}
     </button>
   );
@@ -389,44 +389,45 @@ export default function Home() {
       )}
 
       {/* HEADER */}
-      <header style={{ padding: "12px 16px", borderBottom: "1px solid rgba(195,180,150,0.09)", background: "#191817", position: "sticky", top: 0, zIndex: 100 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 10 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{ width: 30, height: 30, borderRadius: 7, border: "1.5px solid rgba(201,169,110,0.25)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: "#c9a96e" }}>{"◆"}</div>
+      <header style={{ padding: "14px 20px", borderBottom: "1px solid rgba(195,180,150,0.1)", background: "#161514", position: "sticky", top: 0, zIndex: 100 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div style={{ width: 36, height: 36, borderRadius: 10, border: "1.5px solid rgba(201,169,110,0.3)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16, color: "#c9a96e" }}>{"◆"}</div>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 500, fontFamily: "'Cormorant Garamond',serif", color: "#e8e4dd" }}>Shiksha Nerd</div>
-              <div style={{ fontSize: 7, color: "#5c584f", fontWeight: 700, letterSpacing: "0.2em", textTransform: "uppercase" }}>Made by Hampton</div>
+              <div style={{ fontSize: 18, fontWeight: 600, fontFamily: "'Cormorant Garamond',serif", color: "#f0ece4" }}>Shiksha Nerd</div>
+              <div style={{ fontSize: 9, color: "#6b6560", fontWeight: 600, letterSpacing: "0.15em", textTransform: "uppercase" }}>Made by Hampton</div>
             </div>
           </div>
-          <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
-            <div style={{ position: "relative", flex: "1 1 140px", minWidth: 100 }}>
-              <input placeholder="Search..." value={q} onChange={(e) => setQ(e.target.value)} style={{ width: "100%", padding: "7px 10px 7px 26px", borderRadius: 6, border: "1px solid rgba(195,180,150,0.09)", background: "#0f0f0e", color: "#e8e4dd", fontSize: 12, outline: "none", fontFamily: "'Outfit',sans-serif" }} />
+          <div style={{ display: "flex", gap: 8, alignItems: "center", flexWrap: "wrap" }}>
+            <div style={{ position: "relative", flex: "1 1 160px", minWidth: 120 }}>
+              <input placeholder="Search leads..." value={q} onChange={(e) => setQ(e.target.value)} style={{ width: "100%", padding: "9px 12px 9px 32px", borderRadius: 8, border: "1px solid rgba(195,180,150,0.12)", background: "#0f0f0e", color: "#f0ece4", fontSize: 13, outline: "none", fontFamily: "'Outfit',sans-serif" }} />
+              <span style={{ position: "absolute", left: 11, top: "50%", transform: "translateY(-50%)", fontSize: 13, color: "#6b6560" }}>{"⌕"}</span>
             </div>
-            <Btn v="ghost" onClick={() => setShowFilter(!showFilter)} style={{ padding: "7px 10px", fontSize: 11 }}>Filters</Btn>
-            <Btn v="ghost" onClick={() => setShowImport(true)} style={{ padding: "7px 10px", fontSize: 11 }}>Import</Btn>
-            <Btn v="ghost" onClick={exportCSV} style={{ padding: "7px 10px", fontSize: 11 }}>Export</Btn>
-            <Btn onClick={() => setShowAdd(true)} style={{ padding: "7px 14px", fontSize: 11 }}>+ Lead</Btn>
+            <Btn v="ghost" onClick={() => setShowFilter(!showFilter)} style={{ padding: "9px 14px", fontSize: 12 }}>Filters</Btn>
+            <Btn v="ghost" onClick={() => setShowImport(true)} style={{ padding: "9px 14px", fontSize: 12 }}>Import</Btn>
+            <Btn v="ghost" onClick={exportCSV} style={{ padding: "9px 14px", fontSize: 12 }}>Export</Btn>
+            <Btn onClick={() => setShowAdd(true)} style={{ padding: "9px 16px", fontSize: 12 }}>+ New Lead</Btn>
           </div>
         </div>
       </header>
 
       {/* FILTERS */}
       {showFilter && (
-        <div style={{ padding: "10px 16px", background: "#191817", borderBottom: "1px solid rgba(195,180,150,0.09)", display: "flex", gap: 8, flexWrap: "wrap", alignItems: "end" }}>
-          <Sel label="Stage" options={STAGES.map((s) => s.id)} value={fStage} onChange={(e) => setFS(e.target.value)} style={{ minWidth: 100 }} />
-          <Sel label="Counsellor" options={TEAM} value={fTeam} onChange={(e) => setFT(e.target.value)} style={{ minWidth: 100 }} />
-          <Sel label="Program" options={PROGRAMS} value={fProg} onChange={(e) => setFP(e.target.value)} style={{ minWidth: 80 }} />
-          <Sel label="Budget" options={BUDGETS} value={fBudget} onChange={(e) => setFB(e.target.value)} style={{ minWidth: 80 }} />
-          <Sel label="Tier" options={TIERS} value={fTier} onChange={(e) => setFTier(e.target.value)} style={{ minWidth: 70 }} />
-          <Sel label="Source" options={SOURCES} value={fSource} onChange={(e) => setFSrc(e.target.value)} style={{ minWidth: 90 }} />
-          <Btn v="danger" onClick={() => { setFS(""); setFT(""); setFP(""); setFB(""); setFTier(""); setFSrc(""); }} style={{ marginBottom: 14, fontSize: 11 }}>Clear</Btn>
+        <div style={{ padding: "12px 20px", background: "#161514", borderBottom: "1px solid rgba(195,180,150,0.1)", display: "flex", gap: 10, flexWrap: "wrap", alignItems: "end" }}>
+          <Sel label="Stage" options={STAGES.map((s) => s.id)} value={fStage} onChange={(e) => setFS(e.target.value)} style={{ minWidth: 110 }} />
+          <Sel label="Counsellor" options={TEAM} value={fTeam} onChange={(e) => setFT(e.target.value)} style={{ minWidth: 110 }} />
+          <Sel label="Program" options={PROGRAMS} value={fProg} onChange={(e) => setFP(e.target.value)} style={{ minWidth: 90 }} />
+          <Sel label="Budget" options={BUDGETS} value={fBudget} onChange={(e) => setFB(e.target.value)} style={{ minWidth: 90 }} />
+          <Sel label="Tier" options={TIERS} value={fTier} onChange={(e) => setFTier(e.target.value)} style={{ minWidth: 80 }} />
+          <Sel label="Source" options={SOURCES} value={fSource} onChange={(e) => setFSrc(e.target.value)} style={{ minWidth: 100 }} />
+          <Btn v="danger" onClick={() => { setFS(""); setFT(""); setFP(""); setFB(""); setFTier(""); setFSrc(""); }} style={{ marginBottom: 16, fontSize: 12 }}>Clear All</Btn>
         </div>
       )}
 
       {/* STATS */}
-      <div style={{ padding: "14px 16px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(110px,1fr))", gap: 8 }}>
+      <div style={{ padding: "16px 20px", display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(130px,1fr))", gap: 10 }}>
         {[
-          { l: "Total Leads", v: stats.t, c: "#e8e4dd" },
+          { l: "Total Leads", v: stats.t, c: "#f0ece4" },
           { l: "Hot Leads", v: stats.hot, c: "#c9a96e" },
           { l: "Enrolled", v: stats.en, c: "#7cb98a" },
           { l: "Response Rate", v: stats.responseRate + "%", c: "#7ba4c4" },
@@ -435,24 +436,24 @@ export default function Home() {
           { l: "Untouched 3d+", v: stats.untouched, c: "#c47a6c" },
           { l: "Top Program", v: stats.topProgram, c: "#7bbfb4", sub: stats.topProgramCount + " leads" },
         ].map((s: any) => (
-          <div key={s.l} style={{ background: "#1c1b19", borderRadius: 8, padding: "12px 14px", border: "1px solid rgba(195,180,150,0.09)" }}>
-            <div style={{ fontSize: 8, color: "#5c584f", fontWeight: 700, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 6 }}>{s.l}</div>
-            <div style={{ fontSize: 20, fontWeight: 300, color: s.c, fontFamily: "'Cormorant Garamond',serif", lineHeight: 1 }}>{s.v}</div>
-            {s.sub && <div style={{ fontSize: 9, color: "#5c584f", marginTop: 4 }}>{s.sub}</div>}
+          <div key={s.l} style={{ background: "#1a1918", borderRadius: 10, padding: "14px 16px", border: "1px solid rgba(195,180,150,0.1)" }}>
+            <div style={{ fontSize: 10, color: "#6b6560", fontWeight: 600, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: 8 }}>{s.l}</div>
+            <div style={{ fontSize: 24, fontWeight: 400, color: s.c, fontFamily: "'Cormorant Garamond',serif", lineHeight: 1 }}>{s.v}</div>
+            {s.sub && <div style={{ fontSize: 11, color: "#6b6560", marginTop: 5 }}>{s.sub}</div>}
           </div>
         ))}
       </div>
 
       {/* VIEW TABS */}
-      <div style={{ padding: "0 16px 10px", display: "flex", gap: 2 }}>
+      <div style={{ padding: "0 20px 12px", display: "flex", gap: 4 }}>
         {viewTabs.map((vt) => (
-          <button key={vt.id} onClick={() => setView(vt.id)} style={{ padding: "6px 14px", borderRadius: 4, border: "none", background: view === vt.id ? "rgba(201,169,110,0.07)" : "transparent", color: view === vt.id ? "#c9a96e" : "#5c584f", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit',sans-serif", transition: "all .2s" }}>{vt.l}</button>
+          <button key={vt.id} onClick={() => setView(vt.id)} style={{ padding: "8px 18px", borderRadius: 6, border: "none", background: view === vt.id ? "rgba(201,169,110,0.1)" : "transparent", color: view === vt.id ? "#c9a96e" : "#6b6560", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit',sans-serif", transition: "all .2s" }}>{vt.l}</button>
         ))}
       </div>
 
       {/* PIPELINE */}
       {view === "pipeline" && (
-        <div style={{ padding: "0 16px 24px", display: "flex", gap: 10, overflowX: "auto", minHeight: 400 }}>
+        <div style={{ padding: "0 20px 28px", display: "flex", gap: 12, overflowX: "auto", minHeight: 420 }}>
           {PIPELINE_COLS.map((col) => {
             const colLeads = filtered.filter((l) => stageOf(l.stage)?.g === col.id);
             return (
@@ -460,15 +461,15 @@ export default function Home() {
                 onDragOver={(e) => { e.preventDefault(); setDragCol(col.id); }}
                 onDragLeave={() => setDragCol(null)}
                 onDrop={(e) => { e.preventDefault(); const lid = e.dataTransfer.getData("lid"); const fs = STAGES.find((s) => s.g === col.id); if (fs) handleUpdate(lid, { stage: fs.id }); setDragCol(null); }}
-                style={{ minWidth: 220, flex: "1 1 220px", background: dragCol === col.id ? "rgba(201,169,110,0.07)" : "#1c1b19", borderRadius: 10, border: `1px solid ${dragCol === col.id ? "rgba(201,169,110,0.2)" : "rgba(195,180,150,0.09)"}`, transition: "all .25s", display: "flex", flexDirection: "column" }}>
-                <div style={{ padding: "12px 14px 8px", borderBottom: "1px solid rgba(195,180,150,0.09)" }}>
+                style={{ minWidth: 240, flex: "1 1 240px", background: dragCol === col.id ? "rgba(201,169,110,0.08)" : "#1a1918", borderRadius: 12, border: `1px solid ${dragCol === col.id ? "rgba(201,169,110,0.25)" : "rgba(195,180,150,0.1)"}`, transition: "all .25s", display: "flex", flexDirection: "column" }}>
+                <div style={{ padding: "14px 16px 10px", borderBottom: "1px solid rgba(195,180,150,0.1)" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: 11, fontWeight: 600, color: "#e8e4dd" }}>{col.label}</span>
-                    <span style={{ fontSize: 10, fontWeight: 600, color: "#a08350", fontFamily: "'Cormorant Garamond',serif", background: "rgba(201,169,110,0.07)", padding: "1px 7px", borderRadius: 3 }}>{colLeads.length}</span>
+                    <span style={{ fontSize: 13, fontWeight: 600, color: "#f0ece4" }}>{col.label}</span>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#c9a96e", fontFamily: "'Cormorant Garamond',serif", background: "rgba(201,169,110,0.1)", padding: "2px 10px", borderRadius: 4 }}>{colLeads.length}</span>
                   </div>
-                  <div style={{ fontSize: 9, color: "#5c584f", marginTop: 1 }}>{col.sub}</div>
+                  <div style={{ fontSize: 11, color: "#6b6560", marginTop: 2 }}>{col.sub}</div>
                 </div>
-                <div style={{ padding: 8, flex: 1, overflowY: "auto", maxHeight: 480 }}>
+                <div style={{ padding: 10, flex: 1, overflowY: "auto", maxHeight: 520 }}>
                   {colLeads.map((lead) => {
                     const si = stageOf(lead.stage);
                     const fuOverdue = lead.follow_ups?.some((f: any) => f.date <= TODAY);
@@ -476,37 +477,37 @@ export default function Home() {
                       <div key={lead.id} draggable
                         onDragStart={(e) => e.dataTransfer.setData("lid", lead.id)}
                         onClick={() => { setSel(lead); setTab("overview"); }}
-                        style={{ background: "#191817", borderRadius: 7, padding: "10px 12px", marginBottom: 7, cursor: "pointer", border: "1px solid rgba(195,180,150,0.09)", transition: "all .2s" }}
-                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,169,110,0.2)"; }}
-                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(195,180,150,0.09)"; }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 6 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                        style={{ background: "#151413", borderRadius: 10, padding: "13px 15px", marginBottom: 8, cursor: "pointer", border: "1px solid rgba(195,180,150,0.1)", transition: "all .2s" }}
+                        onMouseEnter={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(201,169,110,0.25)"; (e.currentTarget as HTMLElement).style.background = "#1c1b19"; }}
+                        onMouseLeave={(e) => { (e.currentTarget as HTMLElement).style.borderColor = "rgba(195,180,150,0.1)"; (e.currentTarget as HTMLElement).style.background = "#151413"; }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 8 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                             <UrgencyDot lead={lead} />
                             <div>
-                              <div style={{ fontSize: 12, fontWeight: 600, color: "#e8e4dd", marginBottom: 1 }}>{lead.name}</div>
-                              <div style={{ fontSize: 10, color: "#5c584f" }}>{lead.phone}</div>
+                              <div style={{ fontSize: 14, fontWeight: 600, color: "#f0ece4", marginBottom: 2 }}>{lead.name}</div>
+                              <div style={{ fontSize: 12, color: "#6b6560" }}>{lead.phone}</div>
                             </div>
                           </div>
                           <Score v={lead.score} />
                         </div>
-                        <div style={{ display: "flex", flexWrap: "wrap", gap: 3, marginBottom: 6 }}>
+                        <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 8 }}>
                           <Tag>{lead.program}</Tag>
                           <Tag c="#7ba4c4">{lead.budget}</Tag>
                           {lead.global_mba && <Tag c="#7bbfb4">Global</Tag>}
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                          <span style={{ fontSize: 9, color: "#5c584f" }}>{lead.counsellor}</span>
-                          <Tag c="#8a8578" style={{ fontSize: 8 }}>{si?.label}</Tag>
+                          <span style={{ fontSize: 11, color: "#6b6560" }}>{lead.counsellor}</span>
+                          <Tag c="#9a9488" style={{ fontSize: 9 }}>{si?.label}</Tag>
                         </div>
                         {lead.follow_ups?.length > 0 && (
-                          <div style={{ marginTop: 6, padding: "4px 7px", borderRadius: 4, background: fuOverdue ? "rgba(196,122,108,0.08)" : "rgba(201,169,110,0.05)", fontSize: 9, color: fuOverdue ? "#c47a6c" : "#c9a96e" }}>
+                          <div style={{ marginTop: 8, padding: "6px 10px", borderRadius: 6, background: fuOverdue ? "rgba(196,122,108,0.1)" : "rgba(201,169,110,0.06)", fontSize: 11, color: fuOverdue ? "#c47a6c" : "#c9a96e", border: `1px solid ${fuOverdue ? "rgba(196,122,108,0.15)" : "rgba(201,169,110,0.1)"}` }}>
                             {"↻"} {lead.follow_ups[0].note} — {lead.follow_ups[0].date}
                           </div>
                         )}
                       </div>
                     );
                   })}
-                  {colLeads.length === 0 && <div style={{ textAlign: "center", padding: 20, color: "#5c584f", fontSize: 11 }}>Drop leads here</div>}
+                  {colLeads.length === 0 && <div style={{ textAlign: "center", padding: 24, color: "#6b6560", fontSize: 12 }}>Drop leads here</div>}
                 </div>
               </div>
             );

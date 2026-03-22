@@ -694,13 +694,14 @@ export default function Home() {
       {/* LEAD DETAIL MODAL */}
       <Modal open={!!sel} onClose={() => { setSel(null); setTab("overview"); }} title={sel?.name || ""} wide>
         {sel && (() => {
-          const lead = leads.find((l) => l.id === sel.id) || sel;
+          const dbLead = leads.find((l) => l.id === sel.id);
+          const lead = tab === "edit" ? sel : (dbLead || sel);
           const si = stageOf(lead.stage);
           return (
             <div>
               <div style={{ display: "flex", gap: 2, marginBottom: 14, borderBottom: "1px solid rgba(195,180,150,0.09)", paddingBottom: 1, flexWrap: "wrap" }}>
                 {["overview", "edit", "timeline", "colleges", "follow-ups", "reminders"].map((t) => (
-                  <button key={t} onClick={() => setTab(t)} style={{ padding: "5px 12px", borderRadius: "4px 4px 0 0", border: "none", background: tab === t ? "rgba(201,169,110,0.07)" : "transparent", color: tab === t ? "#c9a96e" : "#5c584f", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit',sans-serif", borderBottom: tab === t ? "2px solid #c9a96e" : "2px solid transparent", textTransform: "capitalize" }}>{t}</button>
+                  <button key={t} onClick={() => { if (t === "edit" && dbLead) setSel({...dbLead}); setTab(t); }} style={{ padding: "5px 12px", borderRadius: "4px 4px 0 0", border: "none", background: tab === t ? "rgba(201,169,110,0.07)" : "transparent", color: tab === t ? "#c9a96e" : "#5c584f", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit',sans-serif", borderBottom: tab === t ? "2px solid #c9a96e" : "2px solid transparent", textTransform: "capitalize" }}>{t}</button>
                 ))}
                 <button onClick={() => { setShowWA(lead); setSel(null); }} style={{ padding: "5px 12px", borderRadius: "4px 4px 0 0", border: "none", background: "transparent", color: "#7cb98a", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "'Outfit',sans-serif", borderBottom: "2px solid transparent" }}>
                   {"◉"} WhatsApp
